@@ -43,20 +43,20 @@ while playagain in ('yes','y'):
     while health > 0:
         print('Cards in hand:')
         for x in range(len(hand)):
-            print(str(x) + ') ' + str(hand[x]))
+            print(str(hand[x]))
         print(' ')
 
-        print('Pick the number of the card you want to play.')
+        print('Name a card you want to play.')
         handsize = len(hand)
         while handsize == len(hand):
-            number = 0
-            number = int(input())
-            if number in range(handsize):
-                if str(hand[number]) == 'icicle':
+            name = ''
+            name = input()
+            if name in hand:
+                playCard(hand.index(name))
+                print('Played ' + name)
+                if name == 'icicle':
                     health -= 5
-                playCard(number)
-                for x in range(len(inPlay)):
-                    print(inPlay[x])
+                    print('Dealt 5 damage! Monster at {0} health.'.format(str(health)))
             else:
                 print('That\'s not a valid card.')
 
