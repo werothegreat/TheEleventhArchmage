@@ -42,3 +42,13 @@ will pass on two (or more) lists at once, ending at the end of shortest list
 list comprehension:
 new_list = [foo(x) for x in range(i,j) if some condition]
 will create a list of foo(x) meeting some condition
+
+lambdas - anonymous functions
+filter(lambda x: -expression on x-, list) will apply the expression to the list 
+
+I/O always make sure you close a file!
+either: f = open('filename.txt','mode') -> 'w' for write, 'r' for read
+f.whatever
+f.close()
+or: with open('filename.txt.','mode') as f:
+	f.write(whatever) -> does not need to be explicitly closed
