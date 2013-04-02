@@ -8,6 +8,7 @@ to split a list, use :
 list[1:4] goes from index 1 to index 3
 list[:4] goes from beginning to index 3
 list[4:] goes from index 4 to end
+list[start:end:stride] -> start is inclusive, end is exclusive
 
 list:
 for x in list:
@@ -28,4 +29,16 @@ else:
 
 else will execute whether or not while executes, unless "break" breaks out of while
 
+for/else -> same as while/else, except for will always execute
+
 print('', end='') will not produce a new line.
+
+for index, item in enumerate(list):
+will pass the index associated with each item in the list
+
+for a, b, ... in zip(list_a, list_b, ...):
+will pass on two (or more) lists at once, ending at the end of shortest list
+
+list comprehension:
+new_list = [foo(x) for x in range(i,j) if some condition]
+will create a list of foo(x) meeting some condition
