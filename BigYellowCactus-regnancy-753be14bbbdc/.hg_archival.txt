@@ -1,0 +1,5 @@
+repo: e4cb1d9527a49249761638aa5215d19c3948e4bf
+node: 753be14bbbdc6d8105a3b055dcc06ebe8c952557
+branch: default
+latesttag: Intrigue complete
+latesttagdistance: 159
