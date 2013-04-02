@@ -52,3 +52,16 @@ f.whatever
 f.close()
 or: with open('filename.txt.','mode') as f:
 	f.write(whatever) -> does not need to be explicitly closed
+
+pickling:
+
+import pickle
+outFile = open('filename.txt.', 'wb')
+pickle.dump(aList, outFile)
+ourFile.close()
+
+inFile = open('filename.txt.', 'rb')
+newList = pickle.load(inFile)
+
+newList will be the same as aList.  Pickling allows you to store objects in files
+easiest way is to make everything a list
