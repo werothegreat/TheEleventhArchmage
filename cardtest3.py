@@ -43,7 +43,7 @@ while playagain in ('yes','y'):
     while health > 0:
         print('Cards in hand:')
         for x in range(len(hand)):
-            print(str(hand[x]))
+            print(str(hand[x])+' ', end='')
         print(' ')
 
         print('Name a card you want to play.')

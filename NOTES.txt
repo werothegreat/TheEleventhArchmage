@@ -1,0 +1,31 @@
+list.index(x) will return the first item in list with value x
+
+list.remove(x) will remove the first item in list with value x
+
+del deletes by key, .remove() removes by value
+
+to split a list, use :
+list[1:4] goes from index 1 to index 3
+list[:4] goes from beginning to index 3
+list[4:] goes from index 4 to end
+
+list:
+for x in list:
+	print x
+
+dictionary:
+for x in dict:
+	print dict[x]
+
+in a function:
+foo(*arg) -> *arg signifies an arbitrary number of arguments, and creates a list "arg" in the function of the arguments.
+
+for a list:
+print 'x'.join(list) concatenates all elements in a single line, with "x" in between each element.
+
+while:
+else:
+
+else will execute whether or not while executes, unless "break" breaks out of while
+
+print('', end='') will not produce a new line.
