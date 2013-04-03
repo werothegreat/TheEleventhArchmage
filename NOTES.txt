@@ -65,3 +65,7 @@ newList = pickle.load(inFile)
 
 newList will be the same as aList.  Pickling allows you to store objects in files
 easiest way is to make everything a list
+
+filter(boolean, list) will perform the boolean on the list and return a new list featuring only the elements that pass the filter
+
+map(function, list) will perform the function on the list, and return a new list featuring the changed elements
