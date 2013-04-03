@@ -2,6 +2,7 @@ from deck import Deck
 
 class Player(object):
 
+    health = 50
     #Represents player who plays game
     def __init__(self, name, game):
         self.name = name

@@ -58,7 +58,7 @@ pickling:
 import pickle
 outFile = open('filename.txt.', 'wb')
 pickle.dump(aList, outFile)
-ourFile.close()
+outFile.close()
 
 inFile = open('filename.txt.', 'rb')
 newList = pickle.load(inFile)
