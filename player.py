@@ -24,4 +24,9 @@ class Player(object):
 
     def activate_card(self, card):
         #Activates a card during the play phase
+
+    def deal_damage_to(self, card, other_player, damage=0):
+        attacker = self
+        attacking_card = card
+        other_player.health -= damage
         
