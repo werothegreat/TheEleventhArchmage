@@ -1,4 +1,5 @@
 from deck import Deck
+from card import Card
 
 class Player(object):
 
@@ -20,3 +21,7 @@ class Player(object):
             if card in deck:
                 deck.remove(card)
         target_deck.add(card)
+
+    def activate_card(self, card):
+        #Activates a card during the play phase
+        
