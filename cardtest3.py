@@ -28,7 +28,7 @@ for x in range(7):
     deck.append('icicle')
 
 for x in range(7):
-    deck.append('butt')
+    deck.append('frost ring')
 
 playagain = 'yes'
 while playagain in ('yes','y'):
@@ -39,11 +39,12 @@ while playagain in ('yes','y'):
     for x in range(7):
         drawCard(myDeck)
 
+    focusTotal = 0
     health = enemyHealth
     while health > 0:
         print('Cards in hand:')
         for x in range(len(hand)):
-            print(str(hand[x])+' ', end='')
+            print(str(hand[x])+', ', end='')
         print(' ')
 
         print('Name a card you want to play.')
@@ -54,6 +55,9 @@ while playagain in ('yes','y'):
             if name in hand:
                 playCard(hand.index(name))
                 print('Played ' + name)
+                if name == 'frost ring':
+                    focusTotal += 1
+                    print('You now have {0} total focus.'.format(str(focusTotal)))
                 if name == 'icicle':
                     health -= 5
                     print('Dealt 5 damage! Monster at {0} health.'.format(str(health)))

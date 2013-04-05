@@ -19,10 +19,13 @@ BLOOD = 'blood'
 class Card(object):
 
     #Represents a card
-
+    count = 0
     def __init__(self):
+        Card.count += 1
+        self.id = self.count
 
-        pass
+    def give_id(self):
+        return self.id
         
     def put_out(self, game, player):
         #Defines what happens when card is put into play
@@ -39,3 +42,36 @@ class Card(object):
 
     def when_remove_to_discard(self, game, player):
         #Defines what happens when the card is removed from play to discard
+        pass
+
+class Focus(Card):
+    cardtype = FOCUS
+    def __init__(self):
+        Card.__init__(self)
+
+    def put_out(self, game, player):
+        pass
+
+    def when_remove_to_hand(self, game, player):
+        pass
+
+    def when_remove_to_discard(self, game, player):
+        pass
+
+class Projectile(Card):
+    cardtype = PROJECTILE
+    def __init__(self):
+        Card.__init__(self)
+
+    def put_out(self, game, player):
+        pass
+
+    def activate(self, game, player):
+        pass
+
+    def when_remove_to_hand(self, game, player):
+        pass
+
+    def when_remove_to_discard(self, game, player):
+        pass
+

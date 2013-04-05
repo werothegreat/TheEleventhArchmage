@@ -1,9 +1,8 @@
-from card import Card, FOCUS, PROJECTILE, EFFECT, CREATURE, FROST
+from card import Card, Focus, Projectile, EFFECT, CREATURE, FROST
 from player import Player
 
-class FrostRing(Card):
+class FrostRing(Focus):
 
-    cardtype = FOCUS
     cardname = 'Frost Ring'
     
 
@@ -22,14 +21,16 @@ class FrostRing(Card):
     def when_remove_to_discard(self, game, player):
         player.focusTotal[FROST] -= 1
 
-class Icicle(Card):
+class Icicle(Projectile):
 
-    cardtype = PROJECTILE
     cardname = 'Icicle'
+    focustype = FROST
     focuscost = {FROST : 1}
 
     def __init__(self):
         Card.__init__(self)
+
+    
 
     def activate(self, game, player, target_player):
         player.deal_damage_to(self, target_player, 2)
