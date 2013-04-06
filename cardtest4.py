@@ -69,12 +69,12 @@ while playagain in ('yes','y'):
                     break
                 else:
                     have_nonfocus = False
-            highest_cost = 0
+            lowest_cost = myself.unusedFocus[FROST]
             for x in range(myself.hand.length()):
-                if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] > highest_cost:
-                    highest_cost = myself.hand.cards[x].focuscost[FROST]
+                if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] < lowest_cost:
+                    lowest_cost = myself.hand.cards[x].focuscost[FROST]
                     
-            if have_nonfocus == True and (myself.unusedFocus[FROST] >= highest_cost):
+            if have_nonfocus == True and (myself.unusedFocus[FROST] >= lowest_cost):
                 print('Do you want to play a card? (y or n)')
                 playcard = input()
                 while playcard in ('yes','y'):
@@ -97,9 +97,9 @@ while playagain in ('yes','y'):
                         else:
                             have_nonfocus = False
                     for x in range(myself.hand.length()):
-                        if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] > highest_cost:
-                            highest_cost = myself.hand.cards[x].focuscost[FROST]
-                    if have_nonfocus == True and (myself.unusedFocus[FROST] >= highest_cost) and myself.hand.length() > 0:
+                        if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] < lowest_cost:
+                            lowest_cost = myself.hand.cards[x].focuscost[FROST]
+                    if have_nonfocus == True and (myself.unusedFocus[FROST] >= lowest_cost) and myself.hand.length() > 0:
                         print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
                         print('Do you want to play another card? (y or n)')
                         playcard = input()
