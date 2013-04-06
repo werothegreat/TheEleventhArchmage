@@ -37,9 +37,10 @@ class Player(object):
                 print('You don\'t have enough focus.')
         
 
-    def draw_card(self):
+    def draw_card(self, count=1):
         #Moves card specifically from draw deck to hand
-        self.move_card_to(self.draw.top_card(), self.hand)
+        for x in range(count):
+            self.move_card_to(self.draw.top_card(), self.hand)
 
     def activate_card(self, card, target_player):
         #Activates a card during the play phase

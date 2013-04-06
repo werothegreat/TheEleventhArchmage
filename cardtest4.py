@@ -19,9 +19,8 @@ for i in range(myself.draw.length()):
 playagain = 'yes'
 while playagain in ('yes','y'):
 
-    for x in range(7):
-        myself.draw_card()
-        print('Drew a card!')
+    myself.draw_card(7)
+    print('Drew a card!')
 
     turns = 1
     while enemy.health > 0:
