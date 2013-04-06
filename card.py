@@ -27,20 +27,20 @@ class Card(object):
     def give_id(self):
         return self.id
         
-    def put_out(self, game, player):
+    def put_out(self, gplayer):
         #Defines what happens when card is put into play
         pass
 
-    def activate(self, game, player):
+    def activate(self, player):
         #Defines what happens when the card is activated during player's turn
         #or another player's turn
         pass
 
-    def when_remove_to_hand(self, game, player):
+    def when_remove_to_hand(self, player):
         #Defines what happens when the card is removed from play to hand
         pass
 
-    def when_remove_to_discard(self, game, player):
+    def when_remove_to_discard(self, player):
         #Defines what happens when the card is removed from play to discard
         pass
 

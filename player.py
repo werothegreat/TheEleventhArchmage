@@ -1,5 +1,5 @@
 from deck import Deck
-from card import Card, Focus, Projectile, FOCUS, PROJECTILE
+from card import Card, Focus, Projectile, FOCUS, PROJECTILE, FROST
 
 class Player(object):
 
@@ -12,8 +12,8 @@ class Player(object):
         self.hand = Deck()
         self.inPlay = Deck()
         self.discard = Deck()
-        self.focusTotal = {}
-        self.usedFocus = {}
+        self.focusTotal = {FROST:0}
+        self.unusedFocus = {FROST:0}
         self.health = Player.health
 
     def move_card_to(self, card, target_deck):
@@ -26,13 +26,13 @@ class Player(object):
     def put_out_card(self, card):
         if card.cardtype == FOCUS:
             self.move_card_to(card, self.inPlay)
+            card.put_out(self)
+            print('You have added to your {0} focus.'.format(card.focustype))
         elif card.cardtype == PROJECTILE:
-            if (card.focustype in self.focusTotal) and (self.focusTotal[card.focustype] >= card.focuscost[card.focustype]):
-                if card.focustype not in self.usedFocus:
-                    self.usedFocus[card.focustype] = card.focuscost[card.focustype]
-                else:
-                    self.usedFocus[card.focustype] += card.focuscost[card.focustype]
+            if (card.focustype in self.focusTotal) and (self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]):
+                self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
+                print('You have put {0} into play.'.format(card.cardname))
             else:
                 print('You don\'t have enough focus.')
         
@@ -41,12 +41,15 @@ class Player(object):
         #Moves card specifically from draw deck to hand
         self.move_card_to(self.draw.top_card(), self.hand)
 
-    def activate_card(self, card):
+    def activate_card(self, card, target_player):
         #Activates a card during the play phase
-        card.activate(game, self)
+        card.activate(self, target_player)
+        self.move_card_to(card, self.discard)
+        self.unusedFocus[card.focustype] += card.focuscost[card.focustype]
 
     def deal_damage_to(self, card, other_player, damage=0):
         attacker = self
         attacking_card = card
         other_player.health -= damage
+        print('{0} did {1} damage to {2}!'.format(card.cardname, str(damage), other_player.name))
         
