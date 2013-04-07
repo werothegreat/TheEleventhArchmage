@@ -1,6 +1,6 @@
 from deck import Deck
 from card import Card, Focus, FOCUS, Projectile, FROST
-from frostcards import FrostRing, Icicle, ColdWind
+from frostcards import * #FrostRing, Icicle, ColdWind
 from player import Player
 
 myself = Player('Michael','boob')
@@ -12,11 +12,21 @@ for i in range(7):
 for i in range(6):
     myself.draw.add(ColdWind())
 
+for i in range(13):
+    enemy.draw.add(FrostRing())
+for i in range(7):
+    enemy.draw.add(Icicle())
+
 myself.draw.shuffle()
+enemy.draw.shuffle()
 
 for i in range(myself.draw.length()):
     print(myself.draw.cards[i].cardname)
     print(str(myself.draw.cards[i].id))
+
+for i in range(enemy.draw.length()):
+    print(enemy.draw.cards[i].cardname)
+    print(str(enemy.draw.cards[i].id))
 
 playagain = 'yes'
 while playagain in ('yes','y'):
@@ -34,9 +44,14 @@ while playagain in ('yes','y'):
         print(' ')
 
 
-        if myself.have_focus_inhand() == False and turns == 1:
+        while myself.have_focus_inhand() == False and turns == 1:
             print('You mulligan.')
-            break
+            myself.hand.shuffle_into(myself.draw)
+            myself.draw_card(7)
+            print('Cards in hand:')
+            for x in range(myself.hand.length()):
+                print(str(x)+') '+myself.hand.cards[x].cardname+', ', end = '')
+            print(' ')
 
         if myself.have_focus_inhand() == True:
             print('You may play a focus from your hand.  Enter its number.')
@@ -111,6 +126,8 @@ while playagain in ('yes','y'):
                 else:
                     has_attack = False
         print('Enemy is at '+str(enemy.health)+' health.')
+
+        
         if enemy.health <= 0:
             print('Your enemy is dead!  You win!')
             break
