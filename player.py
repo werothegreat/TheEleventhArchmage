@@ -2,9 +2,10 @@ from deck import Deck
 from card import Card, Focus, Projectile, FOCUS, PROJECTILE, FROST
 
 class Player(object):
-
-    health = 20
-    #Represents player who plays game
+#Represents player who plays game
+    
+    health = 20 #this may be altered, potentially
+    
     def __init__(self, name, game):
         self.name = name
         self.game = game
@@ -24,6 +25,7 @@ class Player(object):
         target_deck.add(card)
 
     def put_out_card(self, card):
+        #puts a card from your hand into the play area
         if card.cardtype == FOCUS:
             self.move_card_to(card, self.inPlay)
             card.put_out(self)
@@ -36,6 +38,27 @@ class Player(object):
             else:
                 print('You don\'t have enough focus.')
         
+    def have_nonfocus_inhand(self):
+        #boolean value - is there a non-focus card in your hand?
+        if self.hand.length() > 0:
+            for x in range(self.hand.length()):
+                if self.hand.cards[x].cardtype != FOCUS:
+                    have_nonfocus = True
+                    break
+                else:
+                    have_nonfocus = False
+        else:
+            have_nonfocus = False
+        return have_nonfocus
+
+    def lowest_cost_inhand(self, focustype):
+        #returns the focus cost of the card with the lowest focus cost in your hand
+        lowest_cost = self.unusedFocus[focustype]
+        if self.hand.length() > 0:
+            for x in range(self.hand.length()):
+                if self.hand.cards[x].cardtype != FOCUS and self.hand.cards[x].focuscost[focustype] < lowest_cost and focustype in self.hand.cards[x].focuscost:
+                    lowest_cost = self.hand.cards[x].focuscost[focustype]
+        return lowest_cost
 
     def draw_card(self, count=1):
         #Moves card specifically from draw deck to hand
@@ -49,6 +72,7 @@ class Player(object):
         self.unusedFocus[card.focustype] += card.focuscost[card.focustype]
 
     def deal_damage_to(self, card, other_player, damage=0):
+        #called by cards in their 'activate' methods to damage other players
         attacker = self
         attacking_card = card
         other_player.health -= damage

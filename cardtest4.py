@@ -1,6 +1,6 @@
 from deck import Deck
 from card import Card, Focus, FOCUS, Projectile, FROST
-from frostcards import FrostRing, Icicle
+from frostcards import FrostRing, Icicle, ColdWind
 from player import Player
 
 myself = Player('Michael','boob')
@@ -9,6 +9,8 @@ enemy = Player('Enemy','boob')
 for i in range(7):
     myself.draw.add(FrostRing())
     myself.draw.add(Icicle())
+for i in range(6):
+    myself.draw.add(ColdWind())
 
 myself.draw.shuffle()
 
@@ -62,18 +64,8 @@ while playagain in ('yes','y'):
             
 
         if myself.hand.length() > 0:
-            for x in range(myself.hand.length()):
-                if myself.hand.cards[x].cardtype != FOCUS:
-                    have_nonfocus = True
-                    break
-                else:
-                    have_nonfocus = False
-            lowest_cost = myself.unusedFocus[FROST]
-            for x in range(myself.hand.length()):
-                if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] < lowest_cost:
-                    lowest_cost = myself.hand.cards[x].focuscost[FROST]
                     
-            if have_nonfocus == True and (myself.unusedFocus[FROST] >= lowest_cost):
+            if myself.have_nonfocus_inhand() == True and (myself.unusedFocus[FROST] >= myself.lowest_cost_inhand(FROST)):
                 print('Do you want to play a card? (y or n)')
                 playcard = input()
                 while playcard in ('yes','y'):
@@ -89,16 +81,7 @@ while playagain in ('yes','y'):
                         else:
                             print('That\'s not a valid card.')
                     print(' ')
-                    for x in range(myself.hand.length()):
-                        if myself.hand.cards[x].cardtype != FOCUS:
-                            have_nonfocus = True
-                            break
-                        else:
-                            have_nonfocus = False
-                    for x in range(myself.hand.length()):
-                        if myself.hand.cards[x].cardtype != FOCUS and myself.hand.cards[x].focuscost[FROST] < lowest_cost:
-                            lowest_cost = myself.hand.cards[x].focuscost[FROST]
-                    if have_nonfocus == True and (myself.unusedFocus[FROST] >= lowest_cost) and myself.hand.length() > 0:
+                    if myself.have_nonfocus_inhand() == True and myself.unusedFocus[FROST] > 0 and (myself.unusedFocus[FROST] >= myself.lowest_cost_inhand(FROST)) and myself.hand.length() > 0:
                         print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
                         print('Do you want to play another card? (y or n)')
                         playcard = input()

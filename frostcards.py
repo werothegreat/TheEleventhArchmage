@@ -27,6 +27,7 @@ class Icicle(Projectile):
     cardname = 'Icicle'
     focustype = FROST
     focuscost = {FROST : 1}
+    damage = 2
 
     def __init__(self):
         Card.__init__(self)
@@ -34,7 +35,20 @@ class Icicle(Projectile):
     
 
     def activate(self, player, target_player):
-        player.deal_damage_to(self, target_player, 2)
+        player.deal_damage_to(self, target_player, self.damage)
+
+class ColdWind(Projectile):
+
+    cardname = 'Cold Wind'
+    focustype = FROST
+    focuscost = {FROST : 2}
+    damage = 1
+
+    def __init__(self):
+        Card.__init__(self)
+
+    def activate(self, player, target_player):
+        player.deal_damage_to(self, target_player, self.damage)
         
 
     
