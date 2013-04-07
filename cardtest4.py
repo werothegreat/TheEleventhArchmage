@@ -33,20 +33,14 @@ while playagain in ('yes','y'):
             print(str(x)+') '+myself.hand.cards[x].cardname+', ', end = '')
         print(' ')
 
-        for x in range(myself.hand.length()):
-            if myself.hand.cards[x].cardtype == FOCUS:
-                have_focus = True
-                print('You may play a focus from your hand.  Enter its number.')
-                print(' ')
-                break
-            else:
-                have_focus = False
 
-        if have_focus == False and turns == 1:
+        if myself.have_focus_inhand() == False and turns == 1:
             print('You mulligan.')
             break
 
-        if have_focus == True:
+        if myself.have_focus_inhand() == True:
+            print('You may play a focus from your hand.  Enter its number.')
+            print(' ')
             handsize = myself.hand.length()
             while handsize == myself.hand.length():
                 chosen_focus_number = int(input())
@@ -117,7 +111,10 @@ while playagain in ('yes','y'):
                 else:
                     has_attack = False
         print('Enemy is at '+str(enemy.health)+' health.')
-        if len(myself.draw.cards) == 0:
+        if enemy.health <= 0:
+            print('Your enemy is dead!  You win!')
+            break
+        elif len(myself.draw.cards) == 0:
             print('Your deck is empty!  You lose!')
             break
         myself.draw_card()

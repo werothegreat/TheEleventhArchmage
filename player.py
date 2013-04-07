@@ -1,20 +1,25 @@
 from deck import Deck
-from card import Card, Focus, Projectile, FOCUS, PROJECTILE, FROST
+from card import * #Card, Focus, Projectile, FOCUS, PROJECTILE, FROST
+
+focus_dict = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
 
 class Player(object):
 #Represents player who plays game
     
+    count = 0
     health = 20 #this may be altered, potentially
     
     def __init__(self, name, game):
+        Player.count += 1
+        self.id = self.count
         self.name = name
         self.game = game
         self.draw = Deck()
         self.hand = Deck()
         self.inPlay = Deck()
         self.discard = Deck()
-        self.focusTotal = {FROST:0}
-        self.unusedFocus = {FROST:0}
+        self.focusTotal = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
+        self.unusedFocus = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
         self.health = Player.health
 
     def move_card_to(self, card, target_deck):
@@ -37,6 +42,19 @@ class Player(object):
                 print('You have put {0} into play.'.format(card.cardname))
             else:
                 print('You don\'t have enough focus.')
+
+    def have_focus_inhand(self):
+        #boolean - do you have a focus in hand?
+        if self.hand.length() > 0:
+            for x in range(self.hand.length()):
+                if self.hand.cards[x].cardtype == FOCUS:
+                    have_focus = True
+                    break
+                else:
+                    have_focus = False
+        else:
+            have_focus = False
+        return have_focus
         
     def have_nonfocus_inhand(self):
         #boolean value - is there a non-focus card in your hand?
