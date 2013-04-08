@@ -1,6 +1,6 @@
 from deck import Deck
 from card import Card, Focus, FOCUS, Projectile, FROST
-from frostcards import * #FrostRing, Icicle, ColdWind
+from frostcards import * 
 from player import Player
 
 myself = Player('Michael','boob')
@@ -138,6 +138,10 @@ while playagain in ('yes','y'):
             print('Your enemy is dead!  You win!')
             break
 
+        if myself.draw.length() == 0:
+            print('Your deck is empty!  You lose!')
+            break
+
         myself.draw_card()
 
         print('Now Enemy goes.')
@@ -153,7 +157,7 @@ while playagain in ('yes','y'):
                     break
         print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
 
-        if enemy.have_nonfocus_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
+        while enemy.have_nonfocus_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype != FOCUS and enemy.hand.cards[x].focuscost[FROST] <= enemy.unusedFocus[FROST]:
                     enemy.put_out_card(enemy.hand.cards[x])
@@ -188,14 +192,12 @@ while playagain in ('yes','y'):
             print('You died!  You lose!')
             break
 
-        enemy.draw_card()
-            
-        
-        
-        if len(myself.draw.cards) == 0:
-            print('Your deck is empty!  You lose!')
+        if enemy.draw.length() == 0:
+            print('Enemy\'s deck is empty!  You win!')
             break
-        
+            
+
+        enemy.draw_card()
         print(' ')
         turns += 1
     
@@ -204,11 +206,14 @@ while playagain in ('yes','y'):
     '''print('My draw is {0}'.format(myself.draw.length()))
     print('My hand is {0}'.format(myself.hand.length()))'''
     myself.hand.shuffle_into(myself.draw)
+    enemy.hand.shuffle_into(enemy.draw)
     print('Shuffled!')
     '''print('My draw is {0}'.format(myself.draw.length()))
     print('My hand is {0}'.format(myself.hand.length()))'''
     myself.inPlay.shuffle_into(myself.draw)
+    enemy.inPlay.shuffle_into(enemy.draw)
     myself.discard.shuffle_into(myself.draw)
+    enemy.discard.shuffle_into(enemy.draw)
     print('Do you want to play again?')
     playagain = input()
         
