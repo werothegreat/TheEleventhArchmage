@@ -75,3 +75,22 @@ class Projectile(Card):
     def when_remove_to_discard(self, game, player):
         pass
 
+class Creature(Card):
+    cardtype = CREATURE
+    def __init__(self):
+        Card.__init__(self)
+
+    def put_out(self, game, player):
+        pass
+
+    def activate(self, game, player):
+        pass
+
+    def block(self, game, player):
+        pass
+
+    def when_remove_to_hand(self, game, player):
+        pass
+
+    def when_remove_to_discard(self, game, player):
+        pass

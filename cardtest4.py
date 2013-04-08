@@ -9,13 +9,16 @@ enemy = Player('Enemy','boob')
 for i in range(7):
     myself.draw.add(FrostRing())
     myself.draw.add(Icicle())
-for i in range(6):
+for i in range(4):
     myself.draw.add(ColdWind())
+    myself.draw.add(Voarthen())
 
 for i in range(13):
     enemy.draw.add(FrostRing())
 for i in range(7):
     enemy.draw.add(Icicle())
+for i in range(2):
+    enemy.draw.add(Voarthen())
 
 myself.draw.shuffle()
 enemy.draw.shuffle()
@@ -77,6 +80,35 @@ while playagain in ('yes','y'):
             for x in range(myself.hand.length()):
                 print(str(x)+') '+myself.hand.cards[x].cardname+', ', end = '')
             print(' ')
+
+        if myself.have_creature_inplay() == True:
+            print('Creatures in play:')
+            for x in range(myself.inPlay.length()):
+                if isinstance(myself.inPlay.cards[x], Creature):
+                    print(str(x)+') '+myself.inPlay.cards[x].cardname+', ', end = '')
+            print(' ')
+            print('Do you want to release a creature? (y or n)')
+            release = input()
+            while release in ('yes','y'):
+                print('Which creature do you want to release?  Enter its number.')
+                playsize = myself.inPlay.length()
+                while playsize == myself.inPlay.length():
+                    number = int(input())
+                    if number in range(myself.inPlay.length()) and isinstance(myself.inPlay.cards[number], Creature):
+                        print('{0} has been released.'.format(myself.inPlay.cards[number].cardname))
+                        myself.inPlay.cards[number].die(myself)
+                    else:
+                        print('That\'s not a valid creature.')
+                print(' ')
+                print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
+                if myself.have_creatures_inplay() == True:
+                    print('Do you want to release another creature? (y or n)')
+                    release = input()
+                else:
+                    release = 'n'
+            
+                        
+            
             
 
         if myself.hand.length() > 0:
@@ -116,22 +148,67 @@ while playagain in ('yes','y'):
                 print(str(x)+') '+myself.inPlay.cards[x].cardname+', ', end = '')
         print(' ')
         for x in range(myself.inPlay.length()):
-            if myself.inPlay.cards[x].cardtype != FOCUS:
-                has_attack = True
+            if isinstance(myself.inPlay.cards[x], Projectile):
+                has_proj = True
                 break
             else:
-                has_attack = False
-        while has_attack == True:
+                has_proj = False
+        while has_proj == True:
             for x in range(myself.inPlay.length()):
-                if myself.inPlay.cards[x].cardtype != FOCUS:
-                    myself.activate_card(myself.inPlay.cards[x], enemy)
-                    break
+                if isinstance(myself.inPlay.cards[x], Projectile):
+                    if enemy.have_creature_inplay():
+                        print('{0} has creatures in play.  Do you want to target one with {1}? (y or n)'.format(enemy.name, myself.inPlay.cards[x].cardname))
+                        hitcreature = input()
+                        if hitcreature in ('yes','y'):
+                            print('{0}\'s creatures:'.format(enemy.name))
+                            for x in range(enemy.inPlay.length()):
+                                if isinstance(enemy.inPlay.cards[x], Creature):
+                                    print(str(x)+') '+enemy.inPlay.cards[x].cardname+', ', end = '')
+                            print(' ')
+                            print('Which creature do you want to target?  Enter its number.')
+                            playsize = enemy.inPlay.length()
+                            while playsize == enemy.inPlay.length():
+                                number = int(input())
+                                if number in range(enemy.inPlay.length()) and isinstance(enemy.inPlay.cards[x], Creature):
+                                    myself.activate_card(myself.inPlay.cards[x], enemy, enemy.inPlay.cards[x])
+                                else:
+                                    print('That\'s not a valid card.')
+                            break
+                        else:
+                            myself.activate_card(myself.inPlay.cards[x], enemy)
+                            break
+                    else:
+                        myself.activate_card(myself.inPlay.cards[x], enemy)
+                        break
             for x in range(myself.inPlay.length()):
-                if myself.inPlay.cards[x].cardtype != FOCUS:
-                    has_attack = True
+                if isinstance(myself.inPlay.cards[x], Projectile):
+                    has_proj = True
                     break
                 else:
-                    has_attack = False
+                    has_proj = False
+        for x in range(myself.inPlay.length()):
+            if isinstance(myself.inPlay.cards[x], Creature):
+                if enemy.have_creature_inplay():
+                    print('{0} has creatures in play.  Do you want to target one with {1}? (y or n)'.format(enemy.name, myself.inPlay.cards[x].cardname))
+                    hitcreature = input()
+                    if hitcreature in ('yes','y'):
+                        print('{0}\'s creatures:'.format(enemy.name))
+                        for x in range(enemy.inPlay.length()):
+                            if isinstance(enemy.inPlay.cards[x], Creature):
+                                print(str(x)+') '+enemy.inPlay.cards[x].cardname+', ', end = '')
+                        print(' ')
+                        print('Which creature do you want to target?  Enter its number.')
+                        playsize = enemy.inPlay.length()
+                        while playsize == enemy.inPlay.length():
+                            number = int(input())
+                            if number in range(enemy.inPlay.length()) and isinstance(enemy.inPlay.cards[x], Creature):
+                                myself.activate_card(myself.inPlay.cards[x], enemy, enemy.inPlay.cards[x])
+                            else:
+                                print('That\'s not a valid card.')
+                    else:
+                        myself.activate_card(myself.inPlay.cards[x], enemy)
+                else:
+                    myself.activate_card(myself.inPlay.cards[x], enemy)
         print('Enemy is at '+str(enemy.health)+' health.')
 
         if enemy.health <= 0:
@@ -166,26 +243,30 @@ while playagain in ('yes','y'):
         
         print('Cards in play:')
         for x in range(enemy.inPlay.length()):
-            if enemy.inPlay.cards[x].cardtype != FOCUS:
+            if not isinstance(enemy.inPlay.cards[x], Focus):
                 print(str(x)+') '+enemy.inPlay.cards[x].cardname+', ', end = '')
         print(' ')
         for x in range(enemy.inPlay.length()):
-            if enemy.inPlay.cards[x].cardtype != FOCUS:
-                has_attack = True
+            if isinstance(enemy.inPlay.cards[x], Projectile):
+                has_proj = True
                 break
             else:
-                has_attack = False
-        while has_attack == True:
+                has_proj = False
+        while has_proj == True:
             for x in range(enemy.inPlay.length()):
-                if enemy.inPlay.cards[x].cardtype != FOCUS:
+                if isinstance(enemy.inPlay.cards[x], Projectile):
                     enemy.activate_card(enemy.inPlay.cards[x], myself)
                     break
             for x in range(enemy.inPlay.length()):
-                if enemy.inPlay.cards[x].cardtype != FOCUS:
-                    has_attack = True
+                if isinstance(enemy.inPlay.cards[x], Projectile):
+                    has_proj = True
                     break
                 else:
-                    has_attack = False
+                    has_proj = False
+        for x in range(enemy.inPlay.length()):
+            if isinstance(enemy.inPlay.cards[x], Creature):
+                enemy.activate_card(enemy.inPlay.cards[x], myself)
+            
         print('{0} is at {1} health.'.format(myself.name, str(myself.health)))
 
         if myself.health <= 0:
@@ -203,17 +284,8 @@ while playagain in ('yes','y'):
     
         
 
-    '''print('My draw is {0}'.format(myself.draw.length()))
-    print('My hand is {0}'.format(myself.hand.length()))'''
-    myself.hand.shuffle_into(myself.draw)
-    enemy.hand.shuffle_into(enemy.draw)
-    print('Shuffled!')
-    '''print('My draw is {0}'.format(myself.draw.length()))
-    print('My hand is {0}'.format(myself.hand.length()))'''
-    myself.inPlay.shuffle_into(myself.draw)
-    enemy.inPlay.shuffle_into(enemy.draw)
-    myself.discard.shuffle_into(myself.draw)
-    enemy.discard.shuffle_into(enemy.draw)
+    myself.end_game_cleanup()
+    enemy.end_game_cleanup()
     print('Do you want to play again?')
     playagain = input()
         

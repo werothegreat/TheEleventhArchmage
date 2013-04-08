@@ -35,7 +35,7 @@ class Player(object):
             self.move_card_to(card, self.inPlay)
             card.put_out(self)
             print('{0} has added to their {1} focus.'.format(self.name, card.focustype))
-        elif isinstance(card, Projectile):
+        elif isinstance(card, Projectile) or isinstance(card, Creature):
             if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
                 self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
@@ -83,16 +83,56 @@ class Player(object):
         for x in range(count):
             self.move_card_to(self.draw.top_card(), self.hand)
 
-    def activate_card(self, card, target_player):
+    def activate_card(self, card, target_player, creature=None):
         #Activates a card during the play phase
-        card.activate(self, target_player)
-        self.move_card_to(card, self.discard)
-        self.unusedFocus[card.focustype] += card.focuscost[card.focustype]
+        card.activate(self, target_player, creature)
 
-    def deal_damage_to(self, card, other_player, damage=0):
+    '''def activate_all_cards(self):
+        for x in range(self.inPlay.length()):
+            if not isinstance(self.inPlay.cards[x], Focus):
+                has_attack = True
+                break
+            else:
+                has_attack = False
+        while has_attack == True:
+            for x in range(self.inPlay.length()):
+                if self.inPlay.cards[x]'''
+            #unfinished
+
+    def have_creature_inplay(self):
+        if self.inPlay.length() > 0:
+            for x in range(self.inPlay.length()):
+                if isinstance(self.inPlay.cards[x], Creature):
+                    have_creature = True
+                    break
+                else:
+                    have_creature = False
+        else:
+            have_creature = False
+        return have_creature
+
+    def deal_damage_to(self, card, target_player, damage, creature=None):
         #called by cards in their 'activate' methods to damage other players
         attacker = self
         attacking_card = card
-        other_player.health -= damage
-        print('{0} did {1} damage to {2}!'.format(card.cardname, str(damage), other_player.name))
-        
+        if creature:
+            creature.health -= damage
+            print('{0} did {1} damage to {2}\'s {3}!'.format(card.cardname, str(damage), target_player.name, creature.cardname))
+            if creature.health <= 0:
+                print('{0}\'s {1} has died!'.format(target_player.name, creature.cardname))
+                creature.die(target_player)
+        else:
+            target_player.health -= damage
+            print('{0} did {1} damage to {2}!'.format(card.cardname, str(damage), target_player.name))  
+
+    def end_game_cleanup(self):
+        #resets your focus and health
+        self.hand.shuffle_into(self.draw)
+        self.inPlay.shuffle_into(self.draw)
+        for sphere in self.focusTotal:
+            self.focusTotal[sphere] = 0
+        for sphere in self.unusedFocus:
+            self.unusedFocus[sphere] = 0
+        self.discard.shuffle_into(self.draw)
+        self.health = Player.health
+                
