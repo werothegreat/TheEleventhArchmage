@@ -31,12 +31,12 @@ class Player(object):
 
     def put_out_card(self, card):
         #puts a card from your hand into the play area
-        if card.cardtype == FOCUS:
+        if isinstance(card, Focus):
             self.move_card_to(card, self.inPlay)
             card.put_out(self)
             print('{0} has added to their {1} focus.'.format(self.name, card.focustype))
-        elif card.cardtype == PROJECTILE:
-            if (card.focustype in self.focusTotal) and (self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]):
+        elif isinstance(card, Projectile):
+            if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
                 self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
                 print('{0} has put {1} into play.'.format(self.name, card.cardname))
@@ -47,7 +47,7 @@ class Player(object):
         #boolean - do you have a focus in hand?
         if self.hand.length() > 0:
             for x in range(self.hand.length()):
-                if self.hand.cards[x].cardtype == FOCUS:
+                if isinstance(self.hand.cards[x], Focus):
                     have_focus = True
                     break
                 else:
@@ -60,7 +60,7 @@ class Player(object):
         #boolean value - is there a non-focus card in your hand?
         if self.hand.length() > 0:
             for x in range(self.hand.length()):
-                if self.hand.cards[x].cardtype != FOCUS:
+                if not isinstance(self.hand.cards[x], Focus):
                     have_nonfocus = True
                     break
                 else:
@@ -73,7 +73,7 @@ class Player(object):
         #returns the focus cost of the card with the lowest focus cost in your hand
         nonfocuses = []
         for x in range(self.hand.length()):
-            if self.hand.cards[x].cardtype != FOCUS:
+            if not isinstance(self.hand.cards[x], Focus):
                 nonfocuses.append(self.hand.cards[x].focuscost[focustype])
         return min(nonfocuses)    
                     
