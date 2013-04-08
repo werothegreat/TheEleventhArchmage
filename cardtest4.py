@@ -146,11 +146,45 @@ while playagain in ('yes','y'):
                     enemy.put_out_card(enemy.hand.cards[x])
                     break
         print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
-            
+
+        while enemy.have_nonfocus_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
+            for x in range(enemy.hand.length()):
+                if enemy.hand.cards[x].cardtype != FOCUS and enemy.hand.cards[x].focuscost[FROST] <= enemy.unusedFocus[FROST]:
+                    enemy.put_out_card(enemy.hand.cards[x])
+                    break
+                #why is it stopping here?
+        
+        print('Cards in play:')
+        for x in range(enemy.inPlay.length()):
+            if enemy.inPlay.cards[x].cardtype != FOCUS:
+                print(str(x)+') '+enemy.inPlay.cards[x].cardname+', ', end = '')
+        print(' ')
+        for x in range(enemy.inPlay.length()):
+            if enemy.inPlay.cards[x].cardtype != FOCUS:
+                has_attack = True
+                break
+            else:
+                has_attack = False
+        while has_attack == True:
+            for x in range(enemy.inPlay.length()):
+                if enemy.inPlay.cards[x].cardtype != FOCUS:
+                    enemy.activate_card(enemy.inPlay.cards[x], enemy)
+                    break
+            for x in range(enemy.inPlay.length()):
+                if enemy.inPlay.cards[x].cardtype != FOCUS:
+                    has_attack = True
+                    break
+                else:
+                    has_attack = False
+        print('{0} is at {1} health.'.format(myself.name, str(myself.health)))
+
+        if myself.health <= 0:
+            print('You died!  You lose!')
+            break
             
         
         
-        elif len(myself.draw.cards) == 0:
+        if len(myself.draw.cards) == 0:
             print('Your deck is empty!  You lose!')
             break
         myself.draw_card()

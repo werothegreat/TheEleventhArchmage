@@ -39,7 +39,7 @@ class Player(object):
             if (card.focustype in self.focusTotal) and (self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]):
                 self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
-                print('(0) has put {1} into play.'.format(self.name, card.cardname))
+                print('{0} has put {1} into play.'.format(self.name, card.cardname))
             else:
                 print('You don\'t have enough focus.')
 
