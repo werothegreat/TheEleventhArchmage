@@ -32,10 +32,12 @@ playagain = 'yes'
 while playagain in ('yes','y'):
 
     myself.draw_card(7)
-    print('Drew a card!')
+    print('Drew cards!')
+    enemy.draw_card(7)
+    print('Enemy draw cards!')
 
     turns = 1
-    while enemy.health > 0:
+    while enemy.health > 0 and myself.health > 0:
         print('Turn {}:'.format(str(turns)))
         print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
         print('Cards in hand:')
@@ -52,6 +54,11 @@ while playagain in ('yes','y'):
             for x in range(myself.hand.length()):
                 print(str(x)+') '+myself.hand.cards[x].cardname+', ', end = '')
             print(' ')
+
+        while enemy.have_focus_inhand() == False and turns == 1:
+            print('Enemy mulligans.')
+            enemy.hand.shuffle_into(enemy.draw)
+            enemy.draw_card(7)
 
         if myself.have_focus_inhand() == True:
             print('You may play a focus from your hand.  Enter its number.')
@@ -127,10 +134,22 @@ while playagain in ('yes','y'):
                     has_attack = False
         print('Enemy is at '+str(enemy.health)+' health.')
 
-        
         if enemy.health <= 0:
             print('Your enemy is dead!  You win!')
             break
+
+        print('Now Enemy goes.')
+        if enemy.have_focus_inhand() == True:
+            for x in range(enemy.hand.length()):
+                if enemy.hand.cards[x].cardtype == FOCUS:
+                    print('Enemy has played {}!'.format(enemy.hand.cards[x].cardname))
+                    enemy.put_out_card(enemy.hand.cards[x])
+                    break
+        print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
+            
+            
+        
+        
         elif len(myself.draw.cards) == 0:
             print('Your deck is empty!  You lose!')
             break

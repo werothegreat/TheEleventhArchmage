@@ -34,12 +34,12 @@ class Player(object):
         if card.cardtype == FOCUS:
             self.move_card_to(card, self.inPlay)
             card.put_out(self)
-            print('You have added to your {0} focus.'.format(card.focustype))
+            print('{0} has added to their {1} focus.'.format(self.name, card.focustype))
         elif card.cardtype == PROJECTILE:
             if (card.focustype in self.focusTotal) and (self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]):
                 self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
-                print('You have put {0} into play.'.format(card.cardname))
+                print('(0) has put {1} into play.'.format(self.name, card.cardname))
             else:
                 print('You don\'t have enough focus.')
 
