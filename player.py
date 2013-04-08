@@ -71,12 +71,12 @@ class Player(object):
 
     def lowest_cost_inhand(self, focustype):
         #returns the focus cost of the card with the lowest focus cost in your hand
-        lowest_cost = self.unusedFocus[focustype]
-        if self.hand.length() > 0:
-            for x in range(self.hand.length()):
-                if self.hand.cards[x].cardtype != FOCUS and self.hand.cards[x].focuscost[focustype] < lowest_cost and focustype in self.hand.cards[x].focuscost:
-                    lowest_cost = self.hand.cards[x].focuscost[focustype]
-        return lowest_cost
+        nonfocuses = []
+        for x in range(self.hand.length()):
+            if self.hand.cards[x].cardtype != FOCUS:
+                nonfocuses.append(self.hand.cards[x].focuscost[focustype])
+        return min(nonfocuses)    
+                    
 
     def draw_card(self, count=1):
         #Moves card specifically from draw deck to hand

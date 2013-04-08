@@ -20,13 +20,13 @@ for i in range(7):
 myself.draw.shuffle()
 enemy.draw.shuffle()
 
-for i in range(myself.draw.length()):
+'''for i in range(myself.draw.length()):
     print(myself.draw.cards[i].cardname)
     print(str(myself.draw.cards[i].id))
 
 for i in range(enemy.draw.length()):
     print(enemy.draw.cards[i].cardname)
-    print(str(enemy.draw.cards[i].id))
+    print(str(enemy.draw.cards[i].id))'''
 
 playagain = 'yes'
 while playagain in ('yes','y'):
@@ -138,7 +138,13 @@ while playagain in ('yes','y'):
             print('Your enemy is dead!  You win!')
             break
 
+        myself.draw_card()
+
         print('Now Enemy goes.')
+        print('Cards in hand:')
+        for x in range(enemy.hand.length()):
+            print(str(x)+') '+enemy.hand.cards[x].cardname+', ', end = '')
+        print(' ')
         if enemy.have_focus_inhand() == True:
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype == FOCUS:
@@ -147,12 +153,12 @@ while playagain in ('yes','y'):
                     break
         print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
 
-        while enemy.have_nonfocus_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
+        if enemy.have_nonfocus_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype != FOCUS and enemy.hand.cards[x].focuscost[FROST] <= enemy.unusedFocus[FROST]:
                     enemy.put_out_card(enemy.hand.cards[x])
                     break
-                #why is it stopping here?
+                
         
         print('Cards in play:')
         for x in range(enemy.inPlay.length()):
@@ -168,7 +174,7 @@ while playagain in ('yes','y'):
         while has_attack == True:
             for x in range(enemy.inPlay.length()):
                 if enemy.inPlay.cards[x].cardtype != FOCUS:
-                    enemy.activate_card(enemy.inPlay.cards[x], enemy)
+                    enemy.activate_card(enemy.inPlay.cards[x], myself)
                     break
             for x in range(enemy.inPlay.length()):
                 if enemy.inPlay.cards[x].cardtype != FOCUS:
@@ -181,13 +187,15 @@ while playagain in ('yes','y'):
         if myself.health <= 0:
             print('You died!  You lose!')
             break
+
+        enemy.draw_card()
             
         
         
         if len(myself.draw.cards) == 0:
             print('Your deck is empty!  You lose!')
             break
-        myself.draw_card()
+        
         print(' ')
         turns += 1
     
