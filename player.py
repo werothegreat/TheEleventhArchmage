@@ -42,7 +42,13 @@ class Player(object):
                 deck.remove(card)
         target_deck.add(card)
 
-    def put_out_card(self, card):
+    def remove_card(self, card):
+        #Deletes a card completely
+        for deck in (self.draw, self.hand, self.inPlay, self.discard):
+            if card in deck.cards:
+                deck.remove(card)
+
+    def put_out_card(self, card, target_proj = None):
         #puts a card from your hand into the play area
         if isinstance(card, Focus):
             self.move_card_to(card, self.inPlay)
@@ -52,6 +58,13 @@ class Player(object):
             if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
                 self.move_card_to(card, self.inPlay)
                 card.put_out(self)
+                print('{0} has put {1} into play.'.format(self.name, card.cardname))
+            else:
+                print('You don\'t have enough focus.')
+        elif isinstance(card, Augment):
+            if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
+                self.move_card_to(card, self.inPlay)
+                card.put_out(self, target_proj)
                 print('{0} has put {1} into play.'.format(self.name, card.cardname))
             else:
                 print('You don\'t have enough focus.')
@@ -69,18 +82,31 @@ class Player(object):
             have_focus = False
         return have_focus
         
-    def have_nonfocus_inhand(self):
-        #boolean value - is there a non-focus card in your hand?
+    def have_creatureproj_inhand(self):
+        #boolean value - is there a creature or projectile in your hand?
         if self.hand.length() > 0:
             for x in range(self.hand.length()):
-                if not isinstance(self.hand.cards[x], Focus):
-                    have_nonfocus = True
+                if isinstance(self.hand.cards[x], Creature) or isinstance(self.hand.cards[x], Projectile):
+                    have_creatureproj = True
                     break
                 else:
-                    have_nonfocus = False
+                    have_creatureproj = False
         else:
-            have_nonfocus = False
-        return have_nonfocus
+            have_creatureproj = False
+        return have_creatureproj
+
+    def have_augment_inhand(self):
+        #is there an augment in your hand?
+        if self.hand.length() > 0:
+            for x in range(self.hand.length()):
+                if isinstance(self.hand.cards[x], Augment):
+                    have_aug = True
+                    break
+                else:
+                    have_aug = False
+        else:
+            have_aug = False
+        return have_aug
 
     def lowest_cost_inhand(self, focustype):
         #returns the focus cost of the card with the lowest focus cost in your hand
@@ -96,9 +122,14 @@ class Player(object):
         for x in range(count):
             self.move_card_to(self.draw.top_card(), self.hand)
 
-    def activate_card(self, card, target_player, creature=None):
+    def activate_card(self, card, target_player=None, creature=None):
         #Activates a card during the play phase
-        card.activate(self, target_player, creature)
+        if target_player and creature:
+            card.activate(self, target_player, creature)
+        elif target_player:
+            card.activate(self, target_player)
+        else:
+            card.activate(self)
 
     '''def activate_all_cards(self):
         for x in range(self.inPlay.length()):
@@ -123,6 +154,18 @@ class Player(object):
         else:
             have_creature = False
         return have_creature
+
+    def have_proj_inplay(self):
+        if self.inPlay.length() > 0:
+            for x in range(self.inPlay.length()):
+                if isinstance(self.inPlay.cards[x], Projectile) and self.inPlay.cards[x].virtual == False:
+                    have_proj = True
+                    break
+                else:
+                    have_proj = False
+        else:
+            have_proj = False
+        return have_proj
 
     def deal_damage_to(self, card, target_player, damage, creature=None):
         #called by cards in their 'activate' methods to damage other players

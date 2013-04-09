@@ -41,6 +41,13 @@ class Game(object):
         for x in range(player.hand.length()):
             print('{0}){1} '.format(str(x),player.hand.cards[x].cardname), end = '')
         print(' ')
+
+    def show_inplay(self, player):
+        print('Cards {0} has in play:'.format(player.name))
+        for x in range(player.inPlay.length()):
+            if not isinstance(player.inPlay.cards[x], Focus):
+                print('{0}){1} '.format(str(x),player.inPlay.cards[x].cardname), end = '')
+        print(' ')
             
     def end_game(self):
         #Resets turns and cleans up players

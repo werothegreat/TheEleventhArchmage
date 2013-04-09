@@ -4,6 +4,7 @@ FOCUS = 0x0001
 PROJECTILE = 0x0002
 EFFECT = 0x0004
 CREATURE = 0x0008
+AUGMENT = 0x0016
 
 FROST = 'Frost'
 FIRE = 'Fire'
@@ -28,6 +29,7 @@ class Card(object):
     def copy(self):
         copied_card = copy.copy(self)
         copied_card.virtual = True
+        copied_card.cardname += ' (virtual)'
         return copied_card
         
 
@@ -69,6 +71,23 @@ class Projectile(Card):
         pass
 
     def activate(self, game, player, creature):
+        pass
+
+    def when_remove_to_hand(self, game, player):
+        pass
+
+    def when_remove_to_discard(self, game, player):
+        pass
+
+class Augment(Card):
+    cardtype = AUGMENT
+    def __init__(self):
+        Card.__init__(self)
+
+    def put_out(self, game, player):
+        pass
+
+    def activate(self, game, player, projectile):
         pass
 
     def when_remove_to_hand(self, game, player):

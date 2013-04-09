@@ -1,4 +1,5 @@
 from card import *
+from deck import *
 from player import Player
 
 class MetalWand(Focus):
@@ -37,14 +38,15 @@ class Bolt(Projectile):
     def __init__(self):
         Card.__init__(self)
         self.damage = Bolt.damage
+        self.morefocus = 'n'
 
     def put_out(self, player):
         if player.unusedFocus[LIGHTNING] > 1:
             print('Do you want to spend 1 more Lightning focus to deal 1 additional damage? (y or n)')
-            morefocus = input()
-            if morefocus in ('yes','y'):
+            self.morefocus = input()
+            if self.morefocus in ('yes','y'):
                 self.damage += 1
-                self.focuscost[LIGHTNING] += 1
+                player.unusedFocus[LIGHTNING] -= 1
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
@@ -55,41 +57,40 @@ class Bolt(Projectile):
             player.deal_damage_to(self, target_player, self.damage, creature)
         else:
             player.deal_damage_to(self, target_player, self.damage)
-        player.move_card_to(self, player.discard)
-        player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+        if self.morefocus in ('yes','y'):
+            player.unusedFocus[LIGHTNING] += 1
+        if self.virtual == False:
+            player.move_card_to(self, player.discard)
+            player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+            self.damage = Bolt.damage
+        else:
+            player.inPlay.remove(self)
+        
 
-class Flash(Projectile):
+class Flash(Augment):
 
     cardname = 'Flash'
     focustype = LIGHTNING
     focuscost = {LIGHTNING : 1}
+    text = 'Play a copy of a Projectile in play for no extra focus cost.'
 
     def __init__(self):
         Card.__init__(self)
 
-    def put_out(self, player):
+    def put_out(self, player, projectile):
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
-        for x in player.inPlay.cards:
-            if isinstance(x, Projectile) and not isinstance(x, Flash):
-                hasotherproj = True
-                break
-            else:
-                hasotherproj = False
-        if hasotherproj == True:
-            print('Projectiles in play:')
-            for i in range(player.inPlay.cards[i]):
-                if isinstance(player.inPlay.cards[i], Projectile) and not isinstance(player.inPlay.cards[i], Flash):
-                    print('{0}){1} '.format(i,player.inPlay.cards[i]))
-            print('Which projectile, aside from another Flash, do you want to play twice?  Enter its number.')
-            while True:
-                num = int(input())
-                if num in range(player.inPlay.length()) and isinstance(player.inPlay.cards[i], Projectile) and not isinstance(player.inPlay.cards[i], Flash):
-                    player.put_out_card(player.inPlay.cards[i].copy())
-                    break
-                else:
-                    print('That\'s not a valid projectile.')
+        copied = projectile.copy()
+        player.inPlay.cards.append(copied)
+        copied.put_out(player)
+
+    def activate(self, player):
+        if self.virtual == False:
+            player.move_card_to(self, player.discard)
+            player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+        else:
+            player.inPlay.remove(self)
                 
     
 
