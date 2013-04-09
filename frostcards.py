@@ -38,13 +38,18 @@ class Icicle(Projectile):
     def __init__(self):
         Card.__init__(self)
 
+    def put_out(self, player):
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
+
     def activate(self, player, target_player, creature = None):
         if creature:
             player.deal_damage_to(self, target_player, self.damage, creature)
         else:
             player.deal_damage_to(self, target_player, self.damage)
         player.move_card_to(self, player.discard)
-        player.unusedFocus[FROST] += self.focuscost[FROST]
+        player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
 
 class ColdWind(Projectile):
 
@@ -56,6 +61,11 @@ class ColdWind(Projectile):
 
     def __init__(self):
         Card.__init__(self)
+
+    def put_out(self, player):
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
 
     def activate(self, player, target_player, creature = None):
         if creature:
@@ -79,6 +89,11 @@ class Voarthen(Creature):
     def __init__(self):
         Card.__init__(self)
         self.health = Voarthen.health
+
+    def put_out(self, player):
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
 
     def activate(self, player, target_player, creature = None):
         if creature:

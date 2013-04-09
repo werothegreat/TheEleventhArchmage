@@ -23,11 +23,18 @@ class Card(object):
     def __init__(self):
         Card.count += 1
         self.id = self.count
+        self.virtual = False
+
+    def copy(self):
+        copied_card = copy.copy(self)
+        copied_card.virtual = True
+        return copied_card
+        
 
     def give_id(self):
         return self.id
         
-    def put_out(self, gplayer):
+    def put_out(self, player):
         #Defines what happens when card is put into play
         pass
 

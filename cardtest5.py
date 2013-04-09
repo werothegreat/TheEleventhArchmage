@@ -1,6 +1,7 @@
 from deck import Deck
 from card import Card, Focus, FOCUS, Projectile, FROST
 from frostcards import *
+from lightningcards import *
 from game import Game
 from player import Player
 
@@ -10,11 +11,11 @@ enemy = Player('Enemy')
 thegame = Game(myself, enemy)
 
 for i in range(7):
-    myself.draw.add(FrostRing())
-    myself.draw.add(Icicle())
+    myself.draw.add(MetalWand())
+    myself.draw.add(Bolt())
 for i in range(4):
-    myself.draw.add(ColdWind())
-    myself.draw.add(Voarthen())
+    myself.draw.add(Flash())
+    myself.draw.add(BallLightning())
 
 for i in range(13):
     enemy.draw.add(FrostRing())
@@ -53,7 +54,7 @@ while playagain in ('yes','y'):
                     print('That\'s not a focus.')
                 else:
                     print('That\'s not a valid card.')
-            print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
+            print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
             thegame.show_hand(myself)
 
         if myself.have_creature_inplay() == True:
@@ -75,7 +76,7 @@ while playagain in ('yes','y'):
                     else:
                         print('That\'s not a valid creature.')
                 print(' ')
-                print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
+                print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
                 if myself.have_creature_inplay() == True:
                     print('Do you want to release another creature? (y or n)')
                     release = input()
@@ -88,7 +89,7 @@ while playagain in ('yes','y'):
 
         if myself.hand.length() > 0:
                     
-            if myself.have_nonfocus_inhand() == True and (myself.unusedFocus[FROST] >= myself.lowest_cost_inhand(FROST)):
+            if myself.have_nonfocus_inhand() == True and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)):
                 print('Do you want to play a card? (y or n)')
                 playcard = input()
                 while playcard in ('yes','y'):
@@ -104,8 +105,8 @@ while playagain in ('yes','y'):
                         else:
                             print('That\'s not a valid card.')
                     print(' ')
-                    if myself.have_nonfocus_inhand() == True and myself.unusedFocus[FROST] > 0 and (myself.unusedFocus[FROST] >= myself.lowest_cost_inhand(FROST)) and myself.hand.length() > 0:
-                        print('You have {0} unused focus.'.format(str(myself.unusedFocus[FROST])))
+                    if myself.have_nonfocus_inhand() == True and myself.unusedFocus[LIGHTNING] > 0 and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)) and myself.hand.length() > 0:
+                        print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
                         print('Do you want to play another card? (y or n)')
                         playcard = input()
                         if playcard in ('yes','y'):

@@ -50,8 +50,8 @@ class Player(object):
             print('{0} has added to their {1} focus.'.format(self.name, card.focustype))
         elif isinstance(card, Projectile) or isinstance(card, Creature):
             if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
-                self.unusedFocus[card.focustype] -= card.focuscost[card.focustype]
                 self.move_card_to(card, self.inPlay)
+                card.put_out(self)
                 print('{0} has put {1} into play.'.format(self.name, card.cardname))
             else:
                 print('You don\'t have enough focus.')
