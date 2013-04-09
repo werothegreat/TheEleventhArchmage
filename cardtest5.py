@@ -42,7 +42,7 @@ while playagain in ('yes','y'):
         thegame.begin_turn(myself)
         thegame.show_hand(myself)
 
-        if myself.have_focus_inhand() == True:
+        if myself.have_inhand(Focus):
             print('You may play a focus from your hand.  Enter its number.')
             print(' ')
             handsize = myself.hand.length()
@@ -89,7 +89,7 @@ while playagain in ('yes','y'):
 
         if myself.hand.length() > 0:
                     
-            if myself.have_creatureproj_inhand() == True and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)):
+            if (myself.have_inhand(Creature) or myself.have_inhand(Projectile)) and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Creature, Projectile)):
                 print('Do you want to play a creature or projectile? (y or n)')
                 playcard = input()
                 while playcard in ('yes','y'):
@@ -105,7 +105,7 @@ while playagain in ('yes','y'):
                         else:
                             print('That\'s not a valid card.')
                     print(' ')
-                    if myself.have_creatureproj_inhand() == True and myself.unusedFocus[LIGHTNING] > 0 and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)) and myself.hand.length() > 0:
+                    if (myself.have_inhand(Creature) or myself.have_inhand(Projectile)) and myself.unusedFocus[LIGHTNING] > 0 and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Creature, Projectile)) and myself.hand.length() > 0:
                         print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
                         print('Do you want to play another creature or projectile? (y or n)')
                         playcard = input()
@@ -113,7 +113,7 @@ while playagain in ('yes','y'):
                             thegame.show_hand(myself)
                     else:
                         playcard = 'n'
-            if myself.have_augment_inhand() == True and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)) and myself.have_proj_inplay():
+            if myself.have_inhand(Augment) and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Augment)) and myself.have_proj_inplay():
                 thegame.show_hand(myself)
                 print('Do you want to play an augment on a projectile? (y or n)')
                 playcard = input()
@@ -140,7 +140,7 @@ while playagain in ('yes','y'):
                             else:
                                 myself.put_out_card(myself.hand.cards[aug], myself.inPlay.cards[proj])
                                 break
-                    if myself.have_augment_inhand() == True and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING)) and myself.have_proj_inplay():
+                    if myself.have_inhand(Augment) and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Augment)) and myself.have_proj_inplay():
                         thegame.show_hand(myself)
                         print('Do you want to play another augment on a projectile? (y or n)')
                         playcard = input()
@@ -247,7 +247,7 @@ while playagain in ('yes','y'):
         for x in range(enemy.hand.length()):
             print(str(x)+') '+enemy.hand.cards[x].cardname+', ', end = '')
         print(' ')
-        if enemy.have_creatureproj_inhand() == True:
+        if enemy.have_inhand(Focus):
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype == FOCUS:
                     print('Enemy has played {}!'.format(enemy.hand.cards[x].cardname))
@@ -255,7 +255,7 @@ while playagain in ('yes','y'):
                     break
         print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
 
-        while enemy.have_creatureproj_inhand() == True and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST)) and enemy.hand.length() > 0:
+        while (enemy.have_inhand(Creature) or enemy.have_inhand(Projectile)) and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST, Creature, Projectile)) and enemy.hand.length() > 0:
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype != FOCUS and enemy.hand.cards[x].focuscost[FROST] <= enemy.unusedFocus[FROST]:
                     enemy.put_out_card(enemy.hand.cards[x])

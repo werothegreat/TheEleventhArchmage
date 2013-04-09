@@ -65,11 +65,25 @@ class Player(object):
             if self.unusedFocus[card.focustype] >= card.focuscost[card.focustype]:
                 self.move_card_to(card, self.inPlay)
                 card.put_out(self, target_proj)
-                print('{0} has put {1} into play.'.format(self.name, card.cardname))
+                print('{0} has put {1} into play, augmenting {2}.'.format(self.name, card.cardname, target_proj.cardname))
             else:
                 print('You don\'t have enough focus.')
 
-    def have_focus_inhand(self):
+    def have_inhand(self, cardtype):
+        #Sees if a particular card type is in the player's hand
+        if self.hand.length() > 0:
+            for x in range(self.hand.length()):
+                if isinstance(self.hand.cards[x], cardtype):
+                    have_it = True
+                    break
+                else:
+                    have_it = False
+        else:
+            have_it = False
+        return have_it
+        
+
+    '''def have_focus_inhand(self):
         #boolean - do you have a focus in hand?
         if self.hand.length() > 0:
             for x in range(self.hand.length()):
@@ -106,15 +120,16 @@ class Player(object):
                     have_aug = False
         else:
             have_aug = False
-        return have_aug
+        return have_aug'''
 
-    def lowest_cost_inhand(self, focustype):
+    def lowest_cost_inhand(self, focustype, *cardtype):
         #returns the focus cost of the card with the lowest focus cost in your hand
-        nonfocuses = []
+        oftype = []
         for x in range(self.hand.length()):
-            if not isinstance(self.hand.cards[x], Focus):
-                nonfocuses.append(self.hand.cards[x].focuscost[focustype])
-        return min(nonfocuses)    
+            for types in cardtype:
+                if isinstance(self.hand.cards[x], types):
+                    oftype.append(self.hand.cards[x].focuscost[focustype])
+        return min(oftype)    
                     
 
     def draw_card(self, count=1):

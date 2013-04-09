@@ -16,7 +16,7 @@ class Game(object):
             x.draw.shuffle()
             x.draw_card(7)
             count = 1
-            while x.have_focus_inhand() == False and count < 5:
+            while x.have_inhand(Focus) == False and count < 5:
                 print('{0} mulligans.'.format(x.name))
                 x.hand.shuffle_into(x.draw)
                 x.draw_card(7)
