@@ -9,11 +9,10 @@ class Player(object):
     count = 0
     health = 20 #this may be altered, potentially
     
-    def __init__(self, name, game):
+    def __init__(self, name, isHuman=True):
         Player.count += 1
         self.id = self.count
         self.name = name
-        self.game = game
         self.draw = Deck()
         self.hand = Deck()
         self.inPlay = Deck()
@@ -21,6 +20,20 @@ class Player(object):
         self.focusTotal = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
         self.unusedFocus = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
         self.health = Player.health
+        self.isHuman = isHuman
+
+    def is_human(self):
+        return self.isHuman
+
+    def has_unused_focus(self):
+        #Returns whether or not player has focus to use
+        for sphere in self.unusedFocus:
+            if self.unusedFocus[sphere] > 0:
+                hasfocus = True
+                break
+            else:
+                hasfocus = False
+        return hasfocus
 
     def move_card_to(self, card, target_deck):
         #Moves card to/from deck, hand, play, discard

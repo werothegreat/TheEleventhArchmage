@@ -5,16 +5,16 @@ PROJECTILE = 0x0002
 EFFECT = 0x0004
 CREATURE = 0x0008
 
-FROST = 'frost'
-FIRE = 'fire'
-GLASS = 'glass'
-SILK = 'silk'
-METAL = 'metal'
-LIGHTNING = 'lightning'
-EARTH = 'earth'
-POISON = 'poison'
-ILLUSION = 'illusion'
-BLOOD = 'blood'
+FROST = 'Frost'
+FIRE = 'Fire'
+GLASS = 'Glass'
+SILK = 'Silk'
+METAL = 'Metal'
+LIGHTNING = 'Lightning'
+EARTH = 'Earth'
+POISON = 'Poison'
+ILLUSION = 'Illusion'
+BLOOD = 'Blood'
 
 class Card(object):
 
@@ -29,11 +29,6 @@ class Card(object):
         
     def put_out(self, gplayer):
         #Defines what happens when card is put into play
-        pass
-
-    def activate(self, player):
-        #Defines what happens when the card is activated during player's turn
-        #or another player's turn
         pass
 
     def when_remove_to_hand(self, player):
@@ -66,7 +61,7 @@ class Projectile(Card):
     def put_out(self, game, player):
         pass
 
-    def activate(self, game, player):
+    def activate(self, game, player, creature):
         pass
 
     def when_remove_to_hand(self, game, player):
@@ -83,7 +78,7 @@ class Creature(Card):
     def put_out(self, game, player):
         pass
 
-    def activate(self, game, player):
+    def activate(self, game, player, creature):
         pass
 
     def block(self, game, player):
