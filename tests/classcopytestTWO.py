@@ -5,7 +5,28 @@ class Dachsund(Dog):
     def __init__(self, name):
         Dog.__init__(self, name)
 
-yep = Dachsund('Snoopy')
-yop = yep.copy()
+class Breeder(Dog):
+    breed = 'breeder'
+    def __init__(self, name):
+        Dog.__init__(self, name)
 
-print(yop.name)
+    def breed(self, dog, alist):
+        dogcopy = dog.copy()
+        alist.append(dogcopy)
+
+yep = Dachsund('Snoopy')
+doglist = []
+doglist.append(yep)
+yop = yep.copy()
+yes = Breeder('Billy')
+
+print(doglist)
+
+doglist.append(yep.copy())
+
+print(doglist)
+
+yes.breed(yep, doglist)
+
+for x in doglist:
+    print(str(x.virtual))

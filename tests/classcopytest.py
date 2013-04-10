@@ -8,6 +8,7 @@ class Dog(object):
         self.name = name
         Dog.count += 1 #using class title instead of self changes it for all
         self.id = self.count
+        self.virtual = False
     def give_name(self):
         print('Hi, my name is {0}!'.format(self.name))
     def give_species(self):
@@ -16,6 +17,7 @@ class Dog(object):
         print('I am #{0}!'.format(self.id))
     def copy(self):
         copied_dog = copy.copy(self)
+        copied_dog.virtual = True
         return copied_dog
 
 '''class Kennel(object):

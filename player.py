@@ -81,46 +81,6 @@ class Player(object):
         else:
             have_it = False
         return have_it
-        
-
-    '''def have_focus_inhand(self):
-        #boolean - do you have a focus in hand?
-        if self.hand.length() > 0:
-            for x in range(self.hand.length()):
-                if isinstance(self.hand.cards[x], Focus):
-                    have_focus = True
-                    break
-                else:
-                    have_focus = False
-        else:
-            have_focus = False
-        return have_focus
-        
-    def have_creatureproj_inhand(self):
-        #boolean value - is there a creature or projectile in your hand?
-        if self.hand.length() > 0:
-            for x in range(self.hand.length()):
-                if isinstance(self.hand.cards[x], Creature) or isinstance(self.hand.cards[x], Projectile):
-                    have_creatureproj = True
-                    break
-                else:
-                    have_creatureproj = False
-        else:
-            have_creatureproj = False
-        return have_creatureproj
-
-    def have_augment_inhand(self):
-        #is there an augment in your hand?
-        if self.hand.length() > 0:
-            for x in range(self.hand.length()):
-                if isinstance(self.hand.cards[x], Augment):
-                    have_aug = True
-                    break
-                else:
-                    have_aug = False
-        else:
-            have_aug = False
-        return have_aug'''
 
     def lowest_cost_inhand(self, focustype, *cardtype):
         #returns the focus cost of the card with the lowest focus cost in your hand

@@ -82,7 +82,9 @@ class Flash(Augment):
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
         copied = projectile.copy()
+        print('Copied projectile!')
         player.inPlay.cards.append(copied)
+        print('Projectile put in play!')
         copied.put_out(player)
 
     def activate(self, player):
