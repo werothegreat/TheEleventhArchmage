@@ -36,7 +36,7 @@ class Bolt(Projectile):
     text = 'Deal 2 damage to target Creature or player.  You may use an additional 1 focus to deal 1 further damage to the same target.'
 
     def __init__(self):
-        Card.__init__(self)
+        Projectile.__init__(self)
         self.damage = Bolt.damage
         self.morefocus = 'n'
 
@@ -50,6 +50,9 @@ class Bolt(Projectile):
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
+
+    def is_blocked(self, player):
+        Projectile.is_blocked(self, player)
         
 
     def activate(self, player, target_player, creature = None):

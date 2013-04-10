@@ -48,6 +48,26 @@ class Game(object):
             if not isinstance(player.inPlay.cards[x], Focus):
                 print('{0}){1} '.format(str(x),player.inPlay.cards[x].cardname), end = '')
         print(' ')
+
+    def play_focus(self, player):
+        pass
+
+    def release_creature(self, player):
+        pass
+
+    def play_creatureproj(self, player):
+        pass
+
+    def play_augment(self, player):
+        pass
+
+    def activate_cards(self, player):
+        pass
+
+    def player_turn(self, player):
+        #Eventually, will encompass all the above methods
+        #to produce one player's whole turn
+        pass
             
     def end_game(self):
         #Resets turns and cleans up players

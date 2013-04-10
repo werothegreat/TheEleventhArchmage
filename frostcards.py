@@ -36,12 +36,15 @@ class Icicle(Projectile):
     text = 'Deals 2 damage to target player or creature.'
 
     def __init__(self):
-        Card.__init__(self)
+        Projectile.__init__(self)
 
     def put_out(self, player):
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
+
+    def is_blocked(self, player):
+        Projectile.is_blocked(self, player)
 
     def activate(self, player, target_player, creature = None):
         if creature:
@@ -60,12 +63,15 @@ class ColdWind(Projectile):
     text = 'Returns target creature to its player\'s hand, and deals 1 damage to that player.'
 
     def __init__(self):
-        Card.__init__(self)
+        Projectile.__init__(self)
 
     def put_out(self, player):
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
+
+    def is_blocked(self, player):
+        Projectile.is_blocked(self, player)
 
     def activate(self, player, target_player, creature = None):
         if creature:

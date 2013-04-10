@@ -66,9 +66,13 @@ class Projectile(Card):
     cardtype = PROJECTILE
     def __init__(self):
         Card.__init__(self)
+        self.blocked = False
 
     def put_out(self, game, player):
         pass
+
+    def is_blocked(self, player):
+        self.blocked = True
 
     def activate(self, game, player, creature):
         pass
@@ -108,6 +112,23 @@ class Creature(Card):
         pass
 
     def block(self, game, player):
+        pass
+
+    def when_remove_to_hand(self, game, player):
+        pass
+
+    def when_remove_to_discard(self, game, player):
+        pass
+
+class Effect(Card):
+    cardtype = EFFECT
+    def __init__(self):
+        Card.__init__(self)
+
+    def put_out(self, game, player):
+        pass
+
+    def activate(self, game, player):
         pass
 
     def when_remove_to_hand(self, game, player):
