@@ -103,6 +103,27 @@ class Electrocute(Projectile):
     cardname = 'Electrocute'
     focustype = LIGHTNING
     focustcost = {LIGHTNING : 2}
+    damage = 4
+    text = 'Deals 4 damage to target player or creature.  Target creature, if neither Silk nor Earth, is stunned for 1 turn.'
+
+    def __init__(self):
+        Projectile.__init__(self)
+
+    def put_out(self, player):
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
+
+    def activate(self, player, target_player, creature = None):
+        if creature:
+            if creature.focustype not in(SILK, EARTH):
+                creature.take_condition(STUNNED, 1)
+            player.deal_damage_to(self, target_player, self.damage, creature)
+        else:
+            player.deal_damage_to(self, target_player, self.damage)
+        player.move_card_to(self, player.discard)
+        player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+        
                 
     
 
@@ -116,7 +137,7 @@ class BallLightning(Creature):
     text = ''
     
     def __init__(self):
-        Card.__init__(self)
+        Creature.__init__(self)
         self.health = BallLightning.health
 
     def put_out(self, player):
