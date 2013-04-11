@@ -125,6 +125,7 @@ while playagain in ('yes','y'):
                             if not isinstance(myself.hand.cards[aug], Augment):
                                 print('That is not an augment.')
                             else:
+                                print('You chose {0}.'.format(myself.hand.cards[aug].cardname))
                                 break
                     print('{0}\'s projectiles:'.format(myself.name))
                     for i in range(myself.inPlay.length()):
@@ -138,6 +139,7 @@ while playagain in ('yes','y'):
                             if not isinstance(myself.inPlay.cards[proj], Projectile):
                                 print('That is not a projectile')
                             else:
+                                print('You chose to augment {0} with {1}.'.format(myself.inPlay.cards[proj].cardname, myself.hand.cards[aug].cardname))
                                 myself.put_out_card(myself.hand.cards[aug], myself.inPlay.cards[proj])
                                 break
                     if myself.have_inhand(Augment) and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Augment)) and myself.have_proj_inplay():

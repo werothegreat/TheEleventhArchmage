@@ -37,19 +37,19 @@ class Bolt(Projectile):
 
     def __init__(self):
         Projectile.__init__(self)
-        self.damage = Bolt.damage
         self.morefocus = 'n'
 
     def put_out(self, player):
-        if player.unusedFocus[LIGHTNING] > 1:
+        self.damage = Bolt.damage
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
+        if player.unusedFocus[LIGHTNING] > 0:
             print('Do you want to spend 1 more Lightning focus to deal 1 additional damage? (y or n)')
             self.morefocus = input()
             if self.morefocus in ('yes','y'):
                 self.damage += 1
                 player.unusedFocus[LIGHTNING] -= 1
-        if self.virtual == False:
-            for sphere in self.focuscost:
-                player.unusedFocus[sphere] -= self.focuscost[sphere]
 
     def is_blocked(self, player):
         Projectile.is_blocked(self, player)
@@ -86,7 +86,7 @@ class Flash(Augment):
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
         copied = projectile.copy()
         print('Copied projectile!')
-        player.inPlay.cards.append(copied)
+        player.inPlay.add(copied)
         print('Projectile put in play!')
         copied.put_out(player)
 
