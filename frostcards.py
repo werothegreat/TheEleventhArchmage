@@ -76,12 +76,45 @@ class ColdWind(Projectile):
     def activate(self, player, target_player, creature = None):
         if creature:
             player.deal_damage_to(self, target_player, self.damage)
-            target_player.move_card_to(creature, target_player.hand)
-            print('{0}\'s {1} was blown back to their hand!'.format(target_player.name, creature.cardname))
+            creature.reset()
+            target_player.move_card_to(creature, target_player.draw)
+            target_player.draw.shuffle()
+            print('{0}\'s {1} was blown back to their draw deck!'.format(target_player.name, creature.cardname))
         else:
             player.deal_damage_to(self, target_player, self.damage)
         player.move_card_to(self, player.discard)
         player.unusedFocus[FROST] += self.focuscost[FROST]
+
+class Freeze(Projectile):
+
+    cardname = 'Freeze'
+    focustype = FROST
+    focuscost = {FROST : 1}
+    damage = 0
+    count = 2
+    text = 'Freezes a target creature for 2 turns.  Does not stack.  Does not affect Fire or Illusion.'
+
+    def __init__(self):
+        Projectile.__init__(self)
+
+    def put_out(self, player):
+        if self.virtual == False:
+            for sphere in self.focuscost:
+                player.unusedFocus[sphere] -= self.focuscost[sphere]
+
+    def is_blocked(self, player):
+        Projectile.is_blocked(self, player)
+
+    def activate(self, player, target_player, creature = None):
+        if creature:
+            if creature.focustype not in (FIRE, ILLUSION):
+                creature.take_condition(FROZEN, 2)
+            else:
+                print('{0} does not work on Fire or Illusion!  Did nothing!')
+        else:
+            print('{0} does nothing!'.format(self.cardname))
+        player.move_card_to(self, player.discard)
+        player.unusedFocus[FROST] += self.focuscost[FROST]               
 
 class Voarthen(Creature):
 
@@ -108,7 +141,14 @@ class Voarthen(Creature):
         else:
             player.deal_damage_to(self, target_player, self.damage)
 
+    def reset(self):
+        for x in self.conditions:
+            self.conditions[x] = 0
+        self.health = Voarthen.health
+        self.damage = Voarthen.damage
+
     def die(self, player):
+        self.reset()
         player.move_card_to(self, player.discard)
         player.unusedFocus[FROST] += self.focuscost[FROST]
         

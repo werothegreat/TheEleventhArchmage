@@ -96,6 +96,13 @@ class Flash(Augment):
             player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
         else:
             player.inPlay.remove(self)
+
+
+class Electrocute(Projectile):
+
+    cardname = 'Electrocute'
+    focustype = LIGHTNING
+    focustcost = {LIGHTNING : 2}
                 
     
 
@@ -123,7 +130,14 @@ class BallLightning(Creature):
         else:
             player.deal_damage_to(self, target_player, self.damage)
 
+    def reset(self):
+        for x in self.conditions:
+            self.conditions[x] = 0
+        self.health = BallLightning.health
+        self.damage = BallLightning.damage
+
     def die(self, player):
+        self.reset()
         player.move_card_to(self, player.discard)
         player.unusedFocus[LIGHTNING] += self.focuscost[LIGHTNING]
     

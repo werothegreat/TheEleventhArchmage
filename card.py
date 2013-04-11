@@ -17,6 +17,10 @@ POISON = 'Poison'
 ILLUSION = 'Illusion'
 BLOOD = 'Blood'
 
+FROZEN = 'frozen'
+ENTANGLED = 'entangled'
+STUNNED = 'stunned'
+
 class Card(object):
 
     #Represents a card
@@ -104,6 +108,15 @@ class Creature(Card):
     cardtype = CREATURE
     def __init__(self):
         Card.__init__(self)
+        self.conditions = {FROZEN:0,ENTANGLED:0,STUNNED:0}
+
+    def check_conditions(self):
+        for x in self.conditions:
+            if self.conditions[x] > 0:
+                self.conditions[x] -= 1
+
+    def take_condition(self, condition, count):
+        self.conditions[condition] = count        
 
     def put_out(self, game, player):
         pass

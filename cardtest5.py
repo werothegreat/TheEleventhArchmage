@@ -6,7 +6,7 @@ from game import Game
 from player import Player
 
 myself = Player('Michael')
-enemy = Player('Enemy')
+enemy = Player('Enemy', False)
 
 thegame = Game(myself, enemy)
 
