@@ -54,8 +54,8 @@ class Game(object):
         if player.have_inhand(Focus):
             print('{0} may play a focus from their hand.'.format(player.name))
             if player.is_human():
-                print('Enter its number:')
                 self.show_hand(player)
+                print('Enter its number:')
                 while True:
                     cfn = int(input())
                     if cfn in range(player.hand.length()) and isinstance(player.hand.cards[cfn], Focus):
@@ -109,6 +109,11 @@ class Game(object):
 
     def activate_cards(self, player):
         pass
+
+    def end_of_turn(self, player):
+        for x in self.players:
+            print('{0} is at {1} health, and has {2} cards in their draw deck.'.format(player.name, player.health, str(player.hand.length())))
+        
 
     def player_turn(self, player):
         #Eventually, will encompass all the above methods
