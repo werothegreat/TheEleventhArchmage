@@ -1,4 +1,5 @@
 from player import *
+from card import *
 
 class Game(object):
     
@@ -50,10 +51,55 @@ class Game(object):
         print(' ')
 
     def play_focus(self, player):
-        pass
+        if player.have_inhand(Focus):
+            print('{0} may play a focus from their hand.'.format(player.name))
+            if player.is_human():
+                print('Enter its number:')
+                self.show_hand(player)
+                while True:
+                    cfn = int(input())
+                    if cfn in range(player.hand.length()) and isinstance(player.hand.cards[cfn], Focus):
+                        print('{0} has played {1}, adding 1 to their {2} focus.'.format(player.name, player.hand.cards[cfn].cardname, player.hand.cards[cfn].focustype))
+                        player.put_out_card(player.hand.cards[cfn])
+                        break
+                    else:
+                        print('That\'s not a valid choice.')
+            else:
+                if player.have_inhand(Focus):
+                    for x in range(player.hand.length()):
+                        if isinstance(player.hand.cards[x], Focus):
+                            print('{0} has played {1}, adding 1 to their {2} focus.'.format(player.name, player.hand.cards[x].cardname, player.hand.cards[x].focustype))
+                            player.put_out_card(player.hand.cards[x])
+                            break
+        
 
     def release_creature(self, player):
-        pass
+        if player.is_human:
+            if player.have_inplay(Creature):
+                self.show_inplay(player)
+                print('Do you want to release a creature? (y or n)')
+                release = input()
+                while release in ('yes','y'):
+                    print('Which creature do you want to release?  Enter its number.')
+                    while True:
+                        ccn = int(input())
+                        if ccn in range(player.inPlay.length()) and isinstance(player.inPlay.cards[ccn], Creature):
+                            print('{0} has been released.'.format(player.inPlay.cards[ccn].cardname))
+                            player.inPlay.cards[ccn].die(player)
+                            break
+                        else:
+                            print('That\'s not a valid creature.')
+                    print(' ')
+                    print('Unused focus:')
+                    for sphere in player.unusedFocus:
+                        if player.unusedFocus[sphere] > 0:
+                            print('{0}: {1} '.format(sphere, player.unusedFocus[sphere]), end = '')
+                    print(' ')
+                    if player.have_inplay(Creature):
+                        print('Do you want to release another creature? (y or n)')
+                        release = input()
+                    else:
+                        release = 'n'
 
     def play_creatureproj(self, player):
         pass

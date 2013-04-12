@@ -126,7 +126,7 @@ class Voarthen(Creature):
     text = 'Leap: When damaging a creature, deal 1 damage to its player as well.'
 
     def __init__(self):
-        Card.__init__(self)
+        Creature.__init__(self)
         self.health = Voarthen.health
 
     def put_out(self, player):

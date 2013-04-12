@@ -118,6 +118,19 @@ class Player(object):
                 if self.inPlay.cards[x]'''
             #unfinished
 
+    def have_inplay(self, cardtype):
+        #Sees if a particular card type is in the player's hand
+        if self.inPlay.length() > 0:
+            for x in range(self.inPlay.length()):
+                if isinstance(self.inPlay.cards[x], cardtype):
+                    have_it = True
+                    break
+                else:
+                    have_it = False
+        else:
+            have_it = False
+        return have_it
+
     def have_creature_inplay(self):
         if self.inPlay.length() > 0:
             for x in range(self.inPlay.length()):

@@ -40,55 +40,18 @@ while playagain in ('yes','y'):
     turns = 1
     while enemy.health > 0 and myself.health > 0:
         thegame.begin_turn(myself)
-        thegame.show_hand(myself)
 
-        if myself.have_inhand(Focus):
-            print('You may play a focus from your hand.  Enter its number.')
-            print(' ')
-            handsize = myself.hand.length()
-            while handsize == myself.hand.length():
-                chosen_focus_number = int(input())
-                if chosen_focus_number in range(myself.hand.length()) and myself.hand.cards[chosen_focus_number].cardtype == FOCUS:
-                    myself.put_out_card(myself.hand.cards[chosen_focus_number])
-                elif chosen_focus_number in range(myself.hand.length()) and myself.hand.cards[chosen_focus_number].cardtype != FOCUS:
-                    print('That\'s not a focus.')
-                else:
-                    print('That\'s not a valid card.')
-            print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
-            thegame.show_hand(myself)
+        thegame.play_focus(myself)
 
-        if myself.have_creature_inplay() == True:
-            print('Creatures in play:')
-            for x in range(myself.inPlay.length()):
-                if isinstance(myself.inPlay.cards[x], Creature):
-                    print(str(x)+') '+myself.inPlay.cards[x].cardname+', ', end = '')
-            print(' ')
-            print('Do you want to release a creature? (y or n)')
-            release = input()
-            while release in ('yes','y'):
-                print('Which creature do you want to release?  Enter its number.')
-                playsize = myself.inPlay.length()
-                while playsize == myself.inPlay.length():
-                    number = int(input())
-                    if number in range(myself.inPlay.length()) and isinstance(myself.inPlay.cards[number], Creature):
-                        print('{0} has been released.'.format(myself.inPlay.cards[number].cardname))
-                        myself.inPlay.cards[number].die(myself)
-                    else:
-                        print('That\'s not a valid creature.')
-                print(' ')
-                print('You have {0} unused focus.'.format(str(myself.unusedFocus[LIGHTNING])))
-                if myself.have_creature_inplay() == True:
-                    print('Do you want to release another creature? (y or n)')
-                    release = input()
-                else:
-                    release = 'n'
+        
+        thegame.release_creature(myself)
             
                         
             
             
 
         if myself.hand.length() > 0:
-                    
+            thegame.show_hand(myself)
             if (myself.have_inhand(Creature) or myself.have_inhand(Projectile)) and (myself.unusedFocus[LIGHTNING] >= myself.lowest_cost_inhand(LIGHTNING, Creature, Projectile)):
                 print('Do you want to play a creature or projectile? (y or n)')
                 playcard = input()
@@ -246,16 +209,16 @@ while playagain in ('yes','y'):
         myself.draw_card()
 
         thegame.begin_turn(enemy)
-        for x in range(enemy.hand.length()):
-            print(str(x)+') '+enemy.hand.cards[x].cardname+', ', end = '')
-        print(' ')
-        if enemy.have_inhand(Focus):
+        thegame.show_hand(enemy)
+        '''if enemy.have_inhand(Focus):
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype == FOCUS:
                     print('Enemy has played {}!'.format(enemy.hand.cards[x].cardname))
                     enemy.put_out_card(enemy.hand.cards[x])
                     break
-        print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))
+        print('Enemy has {} unused focus.'.format(enemy.unusedFocus[FROST]))'''
+
+        thegame.play_focus(enemy)
 
         while (enemy.have_inhand(Creature) or enemy.have_inhand(Projectile)) and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST, Creature, Projectile)) and enemy.hand.length() > 0:
             for x in range(enemy.hand.length()):

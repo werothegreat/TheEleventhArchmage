@@ -121,8 +121,11 @@ class Electrocute(Projectile):
             player.deal_damage_to(self, target_player, self.damage, creature)
         else:
             player.deal_damage_to(self, target_player, self.damage)
-        player.move_card_to(self, player.discard)
-        player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+        if self.virtual == False:
+            player.move_card_to(self, player.discard)
+            player.unusedFocus[self.focustype] += self.focuscost[self.focustype]
+        else:
+            player.inPlay.remove(self)
         
                 
     
