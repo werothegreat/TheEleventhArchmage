@@ -57,7 +57,7 @@ class Game(object):
                 self.show_hand(player)
                 print('Enter its number:')
                 while True:
-                    cfn = int(input())
+                    cfn = int(input())#chosen focus number
                     if cfn in range(player.hand.length()) and isinstance(player.hand.cards[cfn], Focus):
                         print('{0} has played {1}, adding 1 to their {2} focus.'.format(player.name, player.hand.cards[cfn].cardname, player.hand.cards[cfn].focustype))
                         player.put_out_card(player.hand.cards[cfn])
@@ -82,7 +82,7 @@ class Game(object):
                 while release in ('yes','y'):
                     print('Which creature do you want to release?  Enter its number.')
                     while True:
-                        ccn = int(input())
+                        ccn = int(input())#chosen creature number
                         if ccn in range(player.inPlay.length()) and isinstance(player.inPlay.cards[ccn], Creature):
                             print('{0} has been released.'.format(player.inPlay.cards[ccn].cardname))
                             player.inPlay.cards[ccn].die(player)
@@ -102,10 +102,80 @@ class Game(object):
                         release = 'n'
 
     def play_creatureproj(self, player):
-        pass
+        if (player.have_inhand(Creature) or player.have_inhand(Projectile)) and player.able_to_play_type(Creature, Projectile):
+            if player.is_human:
+                self.show_hand(player)
+                print('Do you want to play a creature or projectile? (y or n)')
+                playcard = input()
+                while playcard in ('yes','y'):
+                    print('Which card do you want to play?  Enter its number.')
+                    while True:
+                        ccpn = int(input())#chosen creature-projectile number
+                        if ccpn in range(player.hand.length()) and (isinstance(player.hand.cards[ccpn], Creature) or isinstance(player.hand.cards[ccpn], Projectile)) and player.able_to_play_card(player.hand.cards[ccpn]):
+                            print('{0} has played {1}.'.format(player.name, player.hand.cards[ccpn].cardname))
+                            player.put_out_card(player.hand.cards[ccpn])
+                            break
+                        else:
+                            print('That\'s not a valid selection.')
+                    print(' ')
+                    if (player.have_inhand(Creature) or player.have_inhand(Projectile)) and player.able_to_play_type(Creature, Projectile):
+                        print('Unused focus:')
+                        for sphere in player.unusedFocus:
+                            if player.unusedFocus[sphere] > 0:
+                                print('{0}: {1} '.format(sphere, player.unusedFocus[sphere]), end = '')
+                        print(' ')
+                        print('Do you want to play another creature or projectile? (y or n)')
+                        playcard = input()
+                        if playcard in ('yes','y'):
+                            self.show_hand(player)
+                    else:
+                        playcard = 'n'
+            else:
+                while (player.have_inhand(Creature) or player.have_inhand(Projectile)) and player.able_to_play_type(Creature, Projectile):
+                    for x in range(player.hand.length()):
+                        if (isinstance(player.hand.cards[x], Creature) or isinstance(player.hand.cards[x], Projectile)) and player.able_to_play_card(player.hand.cards[x]):
+                            player.put_out_card(player.hand.cards[x])
+                            break
 
     def play_augment(self, player):
-        pass
+        if player.have_inhand(Augment) and player.able_to_play_type(Augment) and player.have_inplay(Projectile):
+            if player.is_human:
+                self.show_hand(player)
+                print('Do you want to play an augment on a projectile? (y or n)')
+                playaug = input()
+                while playaug in ('yes','y'):
+                    print('Which augment do you want to play?  Enter its number.')
+                    while True:
+                        can = int(input())#chosen augment number
+                        if can in range(player.hand.length()) and isinstance(player.hand.cards[can], Augment) and player.able_to_play_card(player.hand.cards[can]):
+                            print('You chose {0}.'.format(player.hand.cards[can].cardname))
+                            break
+                        else:
+                            print('That\'s not a valid selection.')
+                    self.show_inplay(player)
+                    print('Which projectile do you want to augment?  Enter its number.')
+                    while True:
+                        cpn = int(input())#chosen projectile number
+                        if cpn in range(player.inPlay.length()) and isinstance(player.inPlay.cards[cpn], Projectile):
+                            print('{0} has played {1}, augmenting {2}.'.format(player.name, player.hand.cards[can].cardname, player.inPlay.cards[cpn].cardname))
+                            player.put_out_card(player.hand.cards[can], player.inPlay.cards[cpn])
+                            break
+                        else:
+                            print('That\'s not a valid selection.')
+                    print(' ')
+                    if player.have_inhand(Augment) and player.able_to_play_type(Augment) and player.have_inplay(Projectile):
+                        print('Unused focus:')
+                        for sphere in player.unusedFocus:
+                            if player.unusedFocus[sphere] > 0:
+                                print('{0}: {1} '.format(sphere, player.unusedFocus[sphere]), end = '')
+                        print(' ')
+                        print('Do you want to play another augment? (y or n)')
+                        playaug = input()
+                        if playaug in ('yes','y'):
+                            self.show_hand(player)
+                    else:
+                        playaug = 'n'
+                
 
     def activate_cards(self, player):
         pass
@@ -113,6 +183,7 @@ class Game(object):
     def end_of_turn(self, player):
         for x in self.players:
             print('{0} is at {1} health, and has {2} cards in their draw deck.'.format(player.name, player.health, str(player.hand.length())))
+        player.draw_card()
         
 
     def player_turn(self, player):

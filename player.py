@@ -1,7 +1,7 @@
 from deck import Deck
 from card import * #Card, Focus, Projectile, FOCUS, PROJECTILE, FROST
 
-focus_dict = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
+#focus_dict = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
 
 class Player(object):
 #Represents player who plays game
@@ -18,7 +18,7 @@ class Player(object):
         self.inPlay = Deck()
         self.discard = Deck()
         self.focusTotal = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
-        self.unusedFocus = {FROST:0,FIRE:0,GLASS:0,SILK:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
+        self.unusedFocus = {FROST:0,FIRE:0,SILK:0,GLASS:0,METAL:0,LIGHTNING:0,EARTH:0,POISON:0,ILLUSION:0,BLOOD:0}
         self.health = Player.health
         self.isHuman = isHuman
 
@@ -87,9 +87,32 @@ class Player(object):
         oftype = []
         for x in range(self.hand.length()):
             for types in cardtype:
-                if isinstance(self.hand.cards[x], types):
+                if isinstance(self.hand.cards[x], types) and focustype == self.hand.cards[x].focustype:
                     oftype.append(self.hand.cards[x].focuscost[focustype])
-        return min(oftype)    
+        return min(oftype)
+
+    def able_to_play_type(self, *cardtype):
+        able = False
+        for x in range(self.hand.length()):
+            for types in cardtype:
+                for sphere in self.unusedFocus:
+                    if self.unusedFocus[sphere] > 0:
+                        if isinstance(self.hand.cards[x], types) and self.unusedFocus[sphere] >= self.lowest_cost_inhand(sphere, types):
+                            able = True
+                            break
+                if able == True:
+                    break
+            if able == True:
+                break
+        return able
+
+    def able_to_play_card(self, card):
+        able = True
+        for sphere in card.focuscost:
+            if card.focuscost[sphere] > self.unusedFocus[sphere]:
+                able = False
+                break
+        return able
                     
 
     def draw_card(self, count=1):
