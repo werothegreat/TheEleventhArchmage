@@ -148,12 +148,12 @@ while playagain in ('yes','y'):
         thegame.begin_turn(enemy)
         thegame.show_hand(enemy)
         thegame.play_focus(enemy)
-
-        while (enemy.have_inhand(Creature) or enemy.have_inhand(Projectile)) and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST, Creature, Projectile)) and enemy.hand.length() > 0:
+        thegame.play_creatureproj(enemy)
+        '''while (enemy.have_inhand(Creature) or enemy.have_inhand(Projectile)) and (enemy.unusedFocus[FROST] >= enemy.lowest_cost_inhand(FROST, Creature, Projectile)) and enemy.hand.length() > 0:
             for x in range(enemy.hand.length()):
                 if enemy.hand.cards[x].cardtype != FOCUS and enemy.hand.cards[x].focuscost[FROST] <= enemy.unusedFocus[FROST]:
                     enemy.put_out_card(enemy.hand.cards[x])
-                    break
+                    break'''
                 
         
         print('Cards in play:')

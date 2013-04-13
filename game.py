@@ -74,7 +74,7 @@ class Game(object):
         
 
     def release_creature(self, player):
-        if player.is_human:
+        if player.is_human():
             if player.have_inplay(Creature):
                 self.show_inplay(player)
                 print('Do you want to release a creature? (y or n)')
@@ -103,7 +103,7 @@ class Game(object):
 
     def play_creatureproj(self, player):
         if (player.have_inhand(Creature) or player.have_inhand(Projectile)) and player.able_to_play_type(Creature, Projectile):
-            if player.is_human:
+            if player.is_human():
                 self.show_hand(player)
                 print('Do you want to play a creature or projectile? (y or n)')
                 playcard = input()
@@ -139,7 +139,7 @@ class Game(object):
 
     def play_augment(self, player):
         if player.have_inhand(Augment) and player.able_to_play_type(Augment) and player.have_inplay(Projectile):
-            if player.is_human:
+            if player.is_human():
                 self.show_hand(player)
                 print('Do you want to play an augment on a projectile? (y or n)')
                 playaug = input()
