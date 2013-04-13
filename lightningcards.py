@@ -41,6 +41,7 @@ class Bolt(Projectile):
 
     def put_out(self, player):
         self.damage = Bolt.damage
+        self.morefocus = 'n'
         if self.virtual == False:
             for sphere in self.focuscost:
                 player.unusedFocus[sphere] -= self.focuscost[sphere]
